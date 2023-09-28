@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -45,7 +46,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
     implementation("com.google.dagger:dagger:2.46")
-    annotationProcessor("com.google.dagger:dagger-compiler:2.46")
+    kapt("com.google.dagger:dagger-compiler:2.46")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -59,4 +60,5 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("org.mockito:mockito-android:3.4.6")
+    kaptAndroidTest("com.google.dagger:dagger-compiler:2.46")
 }
