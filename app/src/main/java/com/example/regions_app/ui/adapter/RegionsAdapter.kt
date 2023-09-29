@@ -1,18 +1,20 @@
 package com.example.regions_app.ui.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.regions_app.R
 import com.example.regions_app.data.model.RegionModel
+import com.example.regions_app.data.utils.Likes
 import com.example.regions_app.databinding.RegionListItemBinding
 import com.squareup.picasso.Picasso
 
 class RegionsAdapter(
     private val onItemClicked: (region: RegionModel) -> Unit,
     private val data: MutableList<RegionModel>,
-    private var likes: MutableMap<String, Boolean>
+    private var likes: Likes
 ) : RecyclerView.Adapter<RegionsAdapter.DataViewHolder>() {
 
     class DataViewHolder(
@@ -21,12 +23,15 @@ class RegionsAdapter(
     ) :
         RecyclerView.ViewHolder(itemView) {
 
-        fun bind(region: RegionModel, likes: MutableMap<String, Boolean>) {
+        fun bind(region: RegionModel, likes: Likes) {
             val binding = RegionListItemBinding.bind(itemView)
             Picasso.get().load(region.thumbUrls[0]).into(binding.ivRegionImage)
             binding.tvRegionName.text = region.title
-            if (likes[region.title] == true) {
+            if (likes.getRegion(region.title)) {
+                Log.d("mytag", "like "+ region.title)
                 binding.ivRegionLiked.setImageResource(R.drawable.ic_heart_on)
+            } else {
+                binding.ivRegionLiked.setImageDrawable(null)
             }
             itemView.setOnClickListener { onItemClicked(region) }
         }
@@ -48,8 +53,4 @@ class RegionsAdapter(
 
     fun addData(regions: List<RegionModel>) = this.data.addAll(regions)
 
-    fun updateLikes(likes: MutableMap<String, Boolean>) {
-        this.likes.clear()
-        this.likes.putAll(likes)
-    }
 }

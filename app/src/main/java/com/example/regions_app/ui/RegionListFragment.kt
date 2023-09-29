@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.regions_app.App
 import com.example.regions_app.data.model.RegionModel
+import com.example.regions_app.data.utils.Likes
 import com.example.regions_app.databinding.FragmentRegionListBinding
 import com.example.regions_app.ui.adapter.RegionsAdapter
 import com.example.regions_app.utils.Status
@@ -28,6 +29,9 @@ class RegionListFragment : Fragment() {
 
     @Inject
     lateinit var viewModel: RegionsListViewModel
+
+    @Inject
+    lateinit var likes: Likes
 
     private lateinit var adapter: RegionsAdapter
 
@@ -61,7 +65,7 @@ class RegionListFragment : Fragment() {
     private fun setupView() {
         binding.apply {
             adapter =
-                RegionsAdapter({ region -> onRegionClick(region) }, mutableListOf(), mutableMapOf())
+                RegionsAdapter({ region -> onRegionClick(region) }, mutableListOf(), likes)
             rvMain.layoutManager = LinearLayoutManager(context)
             rvMain.adapter = adapter
 
@@ -80,7 +84,7 @@ class RegionListFragment : Fragment() {
 
                 Status.SUCCESS -> {
                     binding.pullToRefresh.isRefreshing = false
-                    it.data?.let { it1 -> renderList(it1, viewModel.liked) }
+                    it.data?.let { it1 -> renderList(it1) }
                 }
 
                 Status.ERROR -> {
@@ -93,15 +97,14 @@ class RegionListFragment : Fragment() {
     private fun onRegionClick(region: RegionModel) {
         val action = RegionListFragmentDirections.actionRegionsListFragmentToRegionFragment(
             Gson().toJson(region),
-            viewModel.liked[region.title]!!
+            region.title
         )
         findNavController().navigate(action)
     }
 
-    private fun renderList(regions: List<RegionModel>, likes: MutableMap<String, Boolean>) {
+    private fun renderList(regions: List<RegionModel>) {
         adapter.clear()
         adapter.addData(regions)
-        adapter.updateLikes(likes)
         adapter.notifyDataSetChanged()
     }
 }
