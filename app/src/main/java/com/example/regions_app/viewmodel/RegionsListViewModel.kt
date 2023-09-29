@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.regions_app.data.api.ApiService
 import com.example.regions_app.data.model.RegionModel
+import com.example.regions_app.data.utils.Likes
 import com.example.regions_app.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,28 +16,19 @@ import javax.inject.Singleton
 private const val TAG = "RegionsListViewModel"
 
 @Singleton
-class RegionsListViewModel @Inject constructor(val api: ApiService) : ViewModel() {
+class RegionsListViewModel @Inject constructor(val api: ApiService, val likes: Likes) : ViewModel() {
     val regionsList = MutableLiveData<Resource<List<RegionModel>>>(
         Resource.loading(
             listOf()
         )
     )
-    val liked: MutableMap<String, Boolean> = mutableMapOf()
-
-    private fun initializeLikes(regions: List<RegionModel>) {
-        for (region in regions) {
-            if (!liked.containsKey(region.title)) {
-                liked[region.title] = false
-            }
-        }
-    }
 
     fun getRegions() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 regionsList.postValue(Resource.loading(listOf()))
                 val regions = api.getRegions()
-                initializeLikes(regions.regions)
+                likes.initializeRegions(regions.regions)
                 regionsList.postValue(Resource.success(regions.regions))
             } catch (e: Throwable) {
                 regionsList.postValue(
