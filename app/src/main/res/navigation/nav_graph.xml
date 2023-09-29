@@ -28,7 +28,7 @@
             android:name="region"
             app:argType="string" />
         <argument
-            android:name="liked"
-            app:argType="boolean" />
+            android:name="regionName"
+            app:argType="string" />
     </fragment>
 </navigation>
