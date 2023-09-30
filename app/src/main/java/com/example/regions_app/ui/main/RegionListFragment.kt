@@ -1,4 +1,4 @@
-package com.example.regions_app.ui
+package com.example.regions_app.ui.main
 
 import android.content.Context
 import android.os.Bundle
@@ -95,10 +95,11 @@ class RegionListFragment : Fragment() {
     }
 
     private fun onRegionClick(region: RegionModel) {
-        val action = RegionListFragmentDirections.actionRegionsListFragmentToRegionFragment(
-            Gson().toJson(region),
-            region.title
-        )
+        val action =
+            RegionListFragmentDirections.actionRegionsListFragmentToRegionFragment(
+                Gson().toJson(region),
+                region.title
+            )
         findNavController().navigate(action)
     }
 
