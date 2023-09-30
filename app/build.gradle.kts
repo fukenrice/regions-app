@@ -15,6 +15,10 @@ android {
         unitTests.isReturnDefaultValues = true
     }
 
+    packaging {
+        resources.excludes.add("META-INF/*")
+    }
+
     defaultConfig {
         applicationId = "com.example.regions_app"
         minSdk = 30
@@ -22,7 +26,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.example.regions_app.TestRunner"
     }
 
     buildTypes {
