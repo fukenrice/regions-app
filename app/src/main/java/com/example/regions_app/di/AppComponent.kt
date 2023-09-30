@@ -1,7 +1,7 @@
 package com.example.regions_app.di
 
-import com.example.regions_app.ui.RegionDetailsFragment
-import com.example.regions_app.ui.RegionListFragment
+import com.example.regions_app.ui.main.RegionDetailsFragment
+import com.example.regions_app.ui.main.RegionListFragment
 import dagger.Component
 import javax.inject.Singleton
 
