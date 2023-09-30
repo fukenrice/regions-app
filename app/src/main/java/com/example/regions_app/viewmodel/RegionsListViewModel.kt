@@ -8,7 +8,7 @@ import com.example.regions_app.data.api.ApiService
 import com.example.regions_app.data.model.RegionModel
 import com.example.regions_app.data.utils.Likes
 import com.example.regions_app.utils.Resource
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -16,7 +16,7 @@ import javax.inject.Singleton
 private const val TAG = "RegionsListViewModel"
 
 @Singleton
-class RegionsListViewModel @Inject constructor(val api: ApiService, val likes: Likes) : ViewModel() {
+class RegionsListViewModel @Inject constructor(private val api: ApiService, private val dispatcher: CoroutineDispatcher, private val likes: Likes) : ViewModel() {
     val regionsList = MutableLiveData<Resource<List<RegionModel>>>(
         Resource.loading(
             listOf()
@@ -24,7 +24,7 @@ class RegionsListViewModel @Inject constructor(val api: ApiService, val likes: L
     )
 
     fun getRegions() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             try {
                 regionsList.postValue(Resource.loading(listOf()))
                 val regions = api.getRegions()
